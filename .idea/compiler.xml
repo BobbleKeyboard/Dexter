@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true">
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../bobble_android_5.4.0.00VDEV/Bobble-Android/ComicBook/ultidex/src/main/resources/META_INF/services/javax.annotation.processing.Processor" />
+        </processorPath>
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
