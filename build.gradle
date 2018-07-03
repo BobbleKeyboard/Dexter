@@ -22,6 +22,19 @@ allprojects {
     }
 }
 
+task doStuff << {
+    // Do stuff
+    println("doStuff")
+}
+
+tasks.whenTaskAdded { theTask ->
+    if (theTask.name.contains('validateSigningDebug')) {
+        theTask.dependsOn 'doStuff'
+        println("package")
+    }
+    println("!package")
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

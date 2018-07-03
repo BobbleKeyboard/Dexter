@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface PrimaryDex {
     boolean obfuscate() default false;
+
+    String[] extras() default {"0"};
 }
