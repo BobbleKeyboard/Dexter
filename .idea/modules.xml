@@ -3,8 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ultidex/ultidex.iml" filepath="$PROJECT_DIR$/ultidex/ultidex.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ultidexsample.iml" filepath="$PROJECT_DIR$/ultidexsample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dexter/dexter.iml" filepath="$PROJECT_DIR$/dexter/dexter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ultidex.iml" filepath="$PROJECT_DIR$/ultidex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ultidex/ultidex-ultidex.iml" filepath="$PROJECT_DIR$/ultidex/ultidex-ultidex.iml" />
       <module fileurl="file://$PROJECT_DIR$/ultiprocessor/ultiprocessor.iml" filepath="$PROJECT_DIR$/ultiprocessor/ultiprocessor.iml" />
     </modules>
   </component>
