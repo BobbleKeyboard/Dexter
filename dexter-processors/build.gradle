@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':ultidex')
+    implementation project(':dexter-annotations')
 }
 
 sourceCompatibility = "1.7"

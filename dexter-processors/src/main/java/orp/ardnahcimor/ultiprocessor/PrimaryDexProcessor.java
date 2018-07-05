@@ -3,7 +3,6 @@ package orp.ardnahcimor.ultiprocessor;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Set;
 
@@ -24,14 +23,14 @@ import javax.tools.Diagnostic;
 
 import orp.ardnahcimor.ultidex.PrimaryDex;
 
-public class UltiDexProcessor extends AbstractProcessor {
+public class PrimaryDexProcessor extends AbstractProcessor {
 
     private static final String FILE_NAME = "multidex.keep";
     private static boolean mInit = true;
     Messager mMessager;
     Filer mFiler;
 
-    public UltiDexProcessor() {
+    public PrimaryDexProcessor() {
         super();
     }
 
