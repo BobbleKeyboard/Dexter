@@ -1,17 +1,17 @@
 package com.bobble.dexter;
 
-import com.android.build.OutputFile;
-import com.android.build.gradle.api.ApkVariant;
+
+import com.bobble.dexter.core.Dexter;
 import com.bobble.dexter.models.ClassDefItem;
 import com.bobble.dexter.models.FieldIdItem;
 import com.bobble.dexter.models.MethodIdItem;
 import com.bobble.dexter.models.ProtoIdItem;
 import com.bobble.dexter.models.TypeIdItem;
-
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.internal.impldep.org.apache.http.util.TextUtils;
 
-
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,25 +19,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+
 public class DexterDefaultTask extends DefaultTask {
 
-    private byte[] buffer = new byte[1024];
+    private byte[] buffer = new byte[4096];
     private ZipInputStream zipInputStream;
     private RandomAccessFile randomAccessFileOfDex;
     private static final byte[] MAGIC_VALUE = new byte[]{0x64, 0x65, 0x78, 0x0a, 0x30, 0x33, 0x35, 0x00};
     private boolean isBigEndian;
     private byte tmpBuf[] = new byte[4];
     private int endianTag, fileSize, headerSize, stringIdsSize, stringIdsOff, typeIdsSize,
-            typeIdsOff,protoIdsSize, protoIdsOff, fieldIdsSize, fieldIdsOff, methodIdsSize,
+            typeIdsOff, protoIdsSize, protoIdsOff, fieldIdsSize, fieldIdsOff, methodIdsSize,
             methodIdsOff, classDefsSize, classDefsOff;
     private static final int ENDIAN_CONSTANT = 0x12345678;
     private static final int REVERSE_ENDIAN_CONSTANT = 0x78563412;
@@ -50,25 +51,52 @@ public class DexterDefaultTask extends DefaultTask {
     private String descriptor;
     private PrintWriter printWriter;
     private File classNameFile;
-    private int emissions = 0;
     private String projectPath, apkOutputPath, debugApkPath, releaseApkPath, outputPath;
 
 
     @TaskAction
     public void javaTask() {
         projectPath = getProject().getRootDir().getAbsolutePath();
-        System.out.println("Path "+projectPath);
 
-        apkOutputPath = projectPath+File.separator+"/app/build/outputs/apk/";
-        debugApkPath = apkOutputPath+"debug/";
-        releaseApkPath = apkOutputPath+"release/";
-        outputPath = projectPath+File.separator+"/app/build/outputs/";
+        Dexter.BuildVariant variant = Dexter.configure().getVariant();
+        String apkPath;
+        apkOutputPath = projectPath + File.separator + "/app/build/outputs/apk/";
+        if (variant != null) {
+            switch (variant) {
+                case DEBUG: {
+                    apkPath = apkOutputPath + "debug/";
+                    break;
+                }
+                case RELEASE: {
+                    apkPath = apkOutputPath + "release/";
+                    break;
+                }
+                default: {
+                    apkPath = apkOutputPath + "debug/";
+                }
+            }
+        } else {
+            apkPath = apkOutputPath + "debug/";
+        }
 
-        System.out.println("Hello from MyJavaTask");
+        String userApkPath = Dexter.configure().getApkPath();
+        if (userApkPath != null && !userApkPath.isEmpty()) {
+            apkPath = userApkPath;
+        }
+
+        outputPath = projectPath + File.separator + "/app/build/outputs/dexter/";
+        File dexterDir = new File(outputPath);
+        if (!dexterDir.exists()) {
+            dexterDir.mkdirs();
+        }
+
         try {
-            getDexFromEntries(new File(debugApkPath+"app-debug.apk"))
+            File file = new File(apkPath + "app-debug.apk");
+            FileInputStream fileInputStream = new FileInputStream(file);
+            zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
+            extractZipEntriesFromZip(zipInputStream)
+                    .concatMapIterable(x -> x)
                     .subscribe(new Observer<File>() {
-
 
                         @Override
                         public void onSubscribe(Disposable d) {
@@ -77,6 +105,7 @@ public class DexterDefaultTask extends DefaultTask {
 
                         @Override
                         public void onNext(File file) {
+                            System.out.println(" " + file.getName());
                             randomAccessFileOfDex = createRandomAccessFile(file);
                             try {
                                 if (randomAccessFileOfDex != null) {
@@ -86,14 +115,11 @@ public class DexterDefaultTask extends DefaultTask {
                                     loadProtoIds();
                                     loadFieldIds();
                                     loadMethodIds();
-                                    emissions++;
-                                    classNameFile = new File(outputPath+"DexClass "+emissions+".txt");
-                                    loadClassDefs(classNameFile);
+                                    loadClassDefs(file.getName());
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
                         }
 
                         @Override
@@ -106,12 +132,20 @@ public class DexterDefaultTask extends DefaultTask {
 
                         }
                     });
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
     }
 
+    /**
+     * <p>Function which parses the header of a DEX file and verifies it as DEX through Magic
+     * number, check for endianness and assign sizes for string, method and classes.</p>
+     *
+     * @param randomAccessFileOfDex File to be parsed
+     * @throws IOException in case if File is not readable.
+     */
     private void parseAndVerifyHeader(RandomAccessFile randomAccessFileOfDex) throws IOException {
         randomAccessFileOfDex.seek(0);
         byte[] magic = new byte[8];
@@ -122,33 +156,36 @@ public class DexterDefaultTask extends DefaultTask {
         for (byte b : magic) {
             sb.append(String.format("%02X ", b));
         }
-        System.out.println("MAGIC " + sb.toString());
         if (!verifyMagic(magic)) {
             System.err.println("Magic number is wrong -- are you sure " +
                     "this is a DEX file?");
             throw new DexDataException();
         }
 
-        randomAccessFileOfDex.seek(8+4+20+4+4);
+        randomAccessFileOfDex.seek(8 + 4 + 20 + 4 + 4);
         endianTag = readInt(randomAccessFileOfDex);
-        if(endianTag == ENDIAN_CONSTANT){
+        if (endianTag == ENDIAN_CONSTANT) {
             /* Do Nothing*/
-        } else if(endianTag == REVERSE_ENDIAN_CONSTANT){
+        } else if (endianTag == REVERSE_ENDIAN_CONSTANT) {
             isBigEndian = true;
-        } else{
+        } else {
             System.err.println("Endian constant has unexpected value " +
                     Integer.toHexString(endianTag));
             throw new DexDataException();
         }
 
-        System.out.println("HRRR "+isBigEndian+" "+Integer.toHexString(endianTag));
-        randomAccessFileOfDex.seek(8+4+20);  // magic, checksum, signature
+
+        randomAccessFileOfDex.seek(8 + 4 + 20);  // magic, checksum, signature
         fileSize = readInt(randomAccessFileOfDex);
         headerSize = readInt(randomAccessFileOfDex);
-        /*mHeaderItem.endianTag =*/ readInt(randomAccessFileOfDex);
-        /*mHeaderItem.linkSize =*/ readInt(randomAccessFileOfDex);
-        /*mHeaderItem.linkOff =*/ readInt(randomAccessFileOfDex);
-        /*mHeaderItem.mapOff =*/ readInt(randomAccessFileOfDex);
+        /*mHeaderItem.endianTag =*/
+        readInt(randomAccessFileOfDex);
+        /*mHeaderItem.linkSize =*/
+        readInt(randomAccessFileOfDex);
+        /*mHeaderItem.linkOff =*/
+        readInt(randomAccessFileOfDex);
+        /*mHeaderItem.mapOff =*/
+        readInt(randomAccessFileOfDex);
         stringIdsSize = readInt(randomAccessFileOfDex);
         stringIdsOff = readInt(randomAccessFileOfDex);
         typeIdsSize = readInt(randomAccessFileOfDex);
@@ -161,8 +198,10 @@ public class DexterDefaultTask extends DefaultTask {
         methodIdsOff = readInt(randomAccessFileOfDex);
         classDefsSize = readInt(randomAccessFileOfDex);
         classDefsOff = readInt(randomAccessFileOfDex);
-        /*mHeaderItem.dataSize =*/ readInt(randomAccessFileOfDex);
-        /*mHeaderItem.dataOff =*/ readInt(randomAccessFileOfDex);
+        /*mHeaderItem.dataSize =*/
+        readInt(randomAccessFileOfDex);
+        /*mHeaderItem.dataOff =*/
+        readInt(randomAccessFileOfDex);
     }
 
     private void readBytes(byte[] buffer, RandomAccessFile randomAccessFile) throws IOException {
@@ -197,35 +236,32 @@ public class DexterDefaultTask extends DefaultTask {
         return null;
     }
 
-    private Observable<File> getDexFromEntries(File file) throws IOException {
-        return Observable.just(extractZipEntriesFromZip(file))
-                .filter(it -> it.getName().matches("classes.*\\.dex"))
-                .flatMap(zipEntry -> {
-                    String dexName = zipEntry.getName();
-                    File tempFile = new File(outputPath + dexName);
-                    try {
-                        FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
-                        int len;
-                        while ((len = zipInputStream.read(buffer)) > 0) {
-                            fileOutputStream.write(buffer, 0, len);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("File temp not made successfully");
+    private Observable<List<File>> extractZipEntriesFromZip(ZipInputStream zipInputStream) throws IOException {
+        List<File> dexFileList = new ArrayList<>();
+        ZipEntry zipEntry = zipInputStream.getNextEntry();
+        while (zipEntry != null) {
+            if (zipEntry.getName().matches("classes.*\\.dex")) {
+                File tempFile = new File(outputPath + zipEntry.getName());
+                try {
+                    int size;
+                    FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
+                    while ((size = zipInputStream.read(buffer)) > 0) {
+                        fileOutputStream.write(buffer, 0, size);
                     }
-                    return Observable.just(tempFile);
-                });
-    }
-
-
-    private ZipEntry extractZipEntriesFromZip(File file) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(file);
-        zipInputStream = new ZipInputStream(fileInputStream);
-        return zipInputStream.getNextEntry();
+                    dexFileList.add(tempFile);
+                    fileOutputStream.close();
+                } catch (Exception e) {
+                    System.out.println("File temp not made successfully");
+                }
+            }
+            zipEntry = zipInputStream.getNextEntry();
+        }
+        return Observable.just(dexFileList);
     }
 
     /**
      * Loads the string table out of the DEX.
-     *
+     * <p>
      * First we read all of the string_id_items, then we read all of the
      * string_data_item.  Doing it this way should allow us to avoid
      * seeking around in the file.
@@ -262,7 +298,7 @@ public class DexterDefaultTask extends DefaultTask {
         randomAccessFileOfDex.seek(typeIdsOff);
         for (int i = 0; i < count; i++) {
             mTypeIds[i] = new TypeIdItem();
-            mTypeIds[i].setDescriptorIdx(readInt(randomAccessFileOfDex)) ;
+            mTypeIds[i].setDescriptorIdx(readInt(randomAccessFileOfDex));
 
 //            System.out.println(i + ": " + mTypeIds[i].getDescriptorIdx() +
 //                " " + mStrings[mTypeIds[i].getDescriptorIdx()]);
@@ -304,8 +340,8 @@ public class DexterDefaultTask extends DefaultTask {
          */
         for (int i = 0; i < count; i++) {
             mProtoIds[i] = new ProtoIdItem();
-            mProtoIds[i].setShortyIdx(readInt(randomAccessFileOfDex)) ;
-            mProtoIds[i].setReturnTypeIdx(readInt(randomAccessFileOfDex)) ;
+            mProtoIds[i].setShortyIdx(readInt(randomAccessFileOfDex));
+            mProtoIds[i].setReturnTypeIdx(readInt(randomAccessFileOfDex));
             mProtoIds[i].setParametersOff(readInt(randomAccessFileOfDex));
 
 //            System.out.println(i + ": " + mProtoIds[i].getShortyIdx() +
@@ -358,37 +394,46 @@ public class DexterDefaultTask extends DefaultTask {
     /**
      * Loads the class defs list.
      */
-    private void loadClassDefs(File dumpFile) throws IOException {
+    private void loadClassDefs(String dexFileName) throws IOException {
         int count = classDefsSize;
+        printWriter = null;
         mClassDefs = new ClassDefItem[count];
-
+        classNameFile = new File(outputPath + "DexClasses of " + dexFileName + ".txt");
+        classNameFile.createNewFile();
         System.out.println("reading " + count + " classDefs");
         randomAccessFileOfDex.seek(classDefsOff);
         for (int i = 0; i < count; i++) {
             mClassDefs[i] = new ClassDefItem();
             mClassDefs[i].setClassIdx(readInt(randomAccessFileOfDex));
 
-            /* access_flags = */ readInt(randomAccessFileOfDex);
-            /* superclass_idx = */ readInt(randomAccessFileOfDex);
-            /* interfaces_off = */ readInt(randomAccessFileOfDex);
-            /* source_file_idx = */ readInt(randomAccessFileOfDex);
-            /* annotations_off = */ readInt(randomAccessFileOfDex);
-            /* class_data_off = */ readInt(randomAccessFileOfDex);
-            /* static_values_off = */ readInt(randomAccessFileOfDex);
+            /* access_flags = */
+            readInt(randomAccessFileOfDex);
+            /* superclass_idx = */
+            readInt(randomAccessFileOfDex);
+            /* interfaces_off = */
+            readInt(randomAccessFileOfDex);
+            /* source_file_idx = */
+            readInt(randomAccessFileOfDex);
+            /* annotations_off = */
+            readInt(randomAccessFileOfDex);
+            /* class_data_off = */
+            readInt(randomAccessFileOfDex);
+            /* static_values_off = */
+            readInt(randomAccessFileOfDex);
 
 //            System.out.println(i + ": " + mClassDefs[i].getClassIdx() + " " +
 //                mStrings[mTypeIds[mClassDefs[i].getClassIdx()].getDescriptorIdx()]);
             descriptor = mStrings[mTypeIds[mClassDefs[i].getClassIdx()].getDescriptorIdx()];
             //System.out.println(formatAndPrintDescriptor(descriptor));
-            dumpDescriptorToFile(formatAndPrintDescriptor(descriptor), dumpFile);
+            dumpDescriptorToFile(formatAndPrintDescriptor(descriptor), classNameFile);
         }
-        if(printWriter !=null){
+        if (printWriter != null) {
             printWriter.close();
         }
     }
 
-    private void dumpDescriptorToFile(String descriptor, File dumpFile){
-        if(printWriter == null){
+    private void dumpDescriptorToFile(String descriptor, File dumpFile) {
+        if (printWriter == null) {
             try {
                 printWriter = new PrintWriter(dumpFile);
             } catch (FileNotFoundException e) {
@@ -405,7 +450,7 @@ public class DexterDefaultTask extends DefaultTask {
                 .substring(1)
                 //Strip all '/' in '.'
                 .replace('/', '.');
-        formattedDescriptor = formattedDescriptor.substring(0, formattedDescriptor.length() -1);
+        formattedDescriptor = formattedDescriptor.substring(0, formattedDescriptor.length() - 1);
         return formattedDescriptor;
     }
 
