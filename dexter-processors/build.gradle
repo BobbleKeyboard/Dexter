@@ -1,5 +1,11 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "2.0.2"
+}
+
 apply plugin: 'java-library'
 apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
+
 
 group='com.github.bobblekeyboard'
 
@@ -23,9 +29,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+shadowJar {
+    archiveName = "$baseName-$version.$extension"
+}
+
 artifacts {
     archives sourcesJar
     archives javadocJar
+    archives shadowJar
 }
 
 
