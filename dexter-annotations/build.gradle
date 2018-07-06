@@ -1,7 +1,7 @@
 apply plugin: 'java-library'
 apply plugin: 'maven'
 
-group='com.github.jitpack'
+group='com.github.bobblekeyboard'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
