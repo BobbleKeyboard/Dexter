@@ -9,8 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/ultidex" />
-            <option value="$PROJECT_DIR$/ultiprocessor" />
+              <option value="$PROJECT_DIR$/dexter" />
+              <option value="$PROJECT_DIR$/dexter-annotations" />
+            <option value="$PROJECT_DIR$/dexter-processors" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
