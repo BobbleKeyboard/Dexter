@@ -6,6 +6,9 @@ apply plugin: 'java-gradle-plugin'
 
 group='com.github.bobblekeyboard'
 
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

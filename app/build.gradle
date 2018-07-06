@@ -25,6 +25,8 @@ dependencies {
     implementation project(':dexter-annotations')
     annotationProcessor project(':dexter-processors')
     testImplementation 'junit:junit:4.12'
+    //implementation 'com.github.bobblekeyboard:dexter:dexter-annotations:1.0'
+    annotationProcessor 'com.github.bobblekeyboard:dexter:dexter-processors:1.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
