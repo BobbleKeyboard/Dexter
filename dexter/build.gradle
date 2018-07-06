@@ -4,6 +4,8 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'java-gradle-plugin'
 
+group='com.github.jitpack'
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
