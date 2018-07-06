@@ -1,4 +1,6 @@
 apply plugin: 'java-library'
+apply plugin: 'maven'
+group='com.github.jitpack'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
