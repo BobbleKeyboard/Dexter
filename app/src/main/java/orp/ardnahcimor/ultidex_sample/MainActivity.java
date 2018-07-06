@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import orp.ardnahcimor.ultidex.PrimaryDex;
 
-@PrimaryDex
+@PrimaryDex(extras = {"I", "Create", "For", "Creation's", "sake"})
 public class MainActivity extends AppCompatActivity {
 
     @Override

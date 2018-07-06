@@ -4,9 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dexter/dexter.iml" filepath="$PROJECT_DIR$/dexter/dexter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dexter-annotations/dexter-annotations.iml" filepath="$PROJECT_DIR$/dexter-annotations/dexter-annotations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dexter-annotations/dexter-annotations.iml" filepath="$PROJECT_DIR$/dexter-annotations/dexter-annotations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dexter-processors/dexter-processors.iml" filepath="$PROJECT_DIR$/dexter-processors/dexter-processors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dexter-processors/dexter-processors.iml" filepath="$PROJECT_DIR$/dexter-processors/dexter-processors.iml" />
       <module fileurl="file://$PROJECT_DIR$/ultidex.iml" filepath="$PROJECT_DIR$/ultidex.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ultidex/ultidex-ultidex.iml" filepath="$PROJECT_DIR$/ultidex/ultidex-ultidex.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ultiprocessor/ultiprocessor.iml" filepath="$PROJECT_DIR$/ultiprocessor/ultiprocessor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ultidexsample.iml" filepath="$PROJECT_DIR$/ultidexsample.iml" />
     </modules>
   </component>
 </project>
