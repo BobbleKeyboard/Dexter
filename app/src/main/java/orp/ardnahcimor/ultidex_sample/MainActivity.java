@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import orp.ardnahcimor.ultidex.PrimaryDex;
 
-@PrimaryDex(extras = {"android.support.v7.app.AppCompatActivity", "android.os.Bundle"})
+@PrimaryDex(extras = {"android/support/v7/app/AppCompatActivity", "android/os/Bundle"})
 public class MainActivity extends AppCompatActivity {
 
     @Override
