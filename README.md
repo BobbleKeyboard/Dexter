@@ -58,10 +58,10 @@ task validationTask(type:DexterDefaultTask){
 }
 </pre>
 
-Run this task by <code>./gradlew validationTask</code> command. You will see the total number of class defs, strings and type IDs read in your different Dex files:
-<img src=“validation output.png”/>
+Run this task by <code>./gradlew validationTask</code> command. You will see the total number of class defs, strings and type IDs read in your different Dex files:<br>
+<img src=“/validation output.png”/>
 
-Now go to your project root directory and <b>app/build/outputs</b> you will see a directory created by name of <b>dexter</b>. Here you can find a text file by name of <b>DexClasses of classes.dex</b> which corresponds to your primary dex. If you open this you can see the list of classes in your primary dex where you can validate if any class has entered your primary dex or not.
-<img src =“debug classes.png”/>
+Now go to your project root directory and <b>app/build/outputs</b> you will see a directory created by name of <b>dexter</b>. Here you can find a text file by name of <b>DexClasses of classes.dex</b> which corresponds to your primary dex. If you open this you can see the list of classes in your primary dex where you can validate if any class has entered your primary dex or not.<br>
+<img src =“/debug classes.png”/>
 
 
