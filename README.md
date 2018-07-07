@@ -20,17 +20,16 @@ For validation, Dexter consist of a gradle plugin which gives you an insight to 
 In your project level <b>build.gradle</b>:
 <pre>
 buildscript {
-    
-    repositories {
-        google()
-        jcenter()
-        mavenLocal()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
-	classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.6'
-    }
+ repositories {
+    google()
+    jcenter()
+    maven { url 'https://www.jitpack.io' }
+ }
 
+ dependencies {
+   classpath 'com.android.tools.build:gradle:3.1.3'
+   classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.6'
+ }
 }
 </pre>
 Also:
@@ -59,9 +58,9 @@ task validationTask(type:DexterDefaultTask){
 </pre>
 
 Run this task by <code>./gradlew validationTask</code> command. You will see the total number of class defs, strings and type IDs read in your different Dex files:<br>
-<img src=“/validation output.png”/>
+<img src=“Image/validation output.png”/>
 
 Now go to your project root directory and <b>app/build/outputs</b> you will see a directory created by name of <b>dexter</b>. Here you can find a text file by name of <b>DexClasses of classes.dex</b> which corresponds to your primary dex. If you open this you can see the list of classes in your primary dex where you can validate if any class has entered your primary dex or not.<br>
-<img src =“/debug classes.png”/>
+<img src =“Image/debug classes.png”/>
 
 
