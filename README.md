@@ -2,7 +2,8 @@
 
 A utility for managing your MultiDex enabled projects. Ever got <b>java.lang.NoClassDefFoundError</b> while using MultiDex features. This happens due to the reason that the classes needed for starting your app not ends up in your Primary Dex. The ones your app uses on startup time needs to be in the first one. If it’s not – you get that error. 
 <h3>What is the solution?</h3>
-So for having your classes you need for starting up you create a <b>multidex.keep</b> file in your project’s root directory. After creating this file, you add the class names as shown following and the your app finally launches well.<br>
+So for having your classes you need for starting up you create a <b>multidex.keep</b> file in your project’s root directory. After creating this file, you add the class names as shown following and the your app finally launches well.<br><br>
+
 
 <pre>
 orp/ardnahcimor/ultidex_sample/TestNoClass
