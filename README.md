@@ -20,17 +20,15 @@ For validation, Dexter consist of a gradle plugin which gives you an insight to 
 In your project level <b>build.gradle</b>:
 <pre>
 buildscript {
-
-repositories {
-    google()
-    jcenter()
-    maven { url 'https://www.jitpack.io' }
-}
-dependencies {
-  classpath 'com.android.tools.build:gradle:3.1.3'
-  classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.6’
-}
-
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+    }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.1.3'
+    classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.6'
+  }
 }
 </pre>
 Also:
