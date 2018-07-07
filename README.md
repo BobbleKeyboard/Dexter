@@ -73,11 +73,12 @@ task validationTask(type:DexterDefaultTask){
 }
 </pre>
 
-You can see the output in dexter folder as:
-![alt text](https://user-images.githubusercontent.com/12881364/42414254-0686e0cc-824f-11e8-8edc-193e6b475ae8.png)
+You can see the output in dexter folder as:<br>
+
+![alt text](https://user-images.githubusercontent.com/12881364/42414254-0686e0cc-824f-11e8-8edc-193e6b475ae8.png | width=100)
 
 
-
+<h3>Manage your multidek.keep file</h3>
 
 
 
