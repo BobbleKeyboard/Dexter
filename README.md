@@ -84,7 +84,8 @@ You can see the output in dexter folder as:<br>
 
 
 <h2>Manage your multidek.keep file</h2>
-Making and managing the keep file is also easy with <b>Dexter</b>. Compile the following in your app level <b>build.gradle</b>:<br>
+Making and managing the keep file is also easy with <b>Dexter</b>. Compile the following in your app level <b>build.gradle</b>:<br><br>
+
 
 <pre>
 implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6’
