@@ -78,7 +78,7 @@ public class DexterDefaultTask extends DefaultTask {
                     break;
                 }
                 default: {
-                    apkPath = apkOutputPath + "debug/";
+                    apkPath = apkOutputPath + "debug/app-debug.apk";
                 }
             }
         } else {
