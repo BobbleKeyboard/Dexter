@@ -15,7 +15,7 @@ Dexter helps in following to major things:<br>
 <li>To validate what goes in your Primary Dex. You can have look to list of whole classes which the dex contains.</li>
 </ul>
 
-<h3>Validating the Dex Files</h3>
+<h2>Validating the Dex Files</h2>
 For validation, Dexter consist of a gradle plugin which gives you an insight to the list of classes going in your multiple dex files. Configuration is very simple:<br>
 In your project level <b>build.gradle</b>:
 <pre>
@@ -66,7 +66,7 @@ Now go to your project root directory and <b>app/build/outputs</b> you will see 
 
 You can also see the rest dex Files and there respective text files. You can open the remaining text files to have an insight in the classes entering in them.
 
-<h2>Configuring for a custom path</h2>
+<h3>Configuring for a custom path</h3>
 <pre>
 task validationTask(type:DexterDefaultTask){
   Dexter.configure().setApkPath("/Users/amanjeetsingh150/Desktop/app-debug.apk")
@@ -75,10 +75,10 @@ task validationTask(type:DexterDefaultTask){
 
 You can see the output in dexter folder as:<br>
 
-![alt text](https://user-images.githubusercontent.com/12881364/42414254-0686e0cc-824f-11e8-8edc-193e6b475ae8.png | width=100)
+![alt text](https://user-images.githubusercontent.com/12881364/42414254-0686e0cc-824f-11e8-8edc-193e6b475ae8.png)
 
 
-<h3>Manage your multidek.keep file</h3>
+<h2>Manage your multidek.keep file</h2>
 
 
 
