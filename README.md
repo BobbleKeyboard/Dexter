@@ -20,16 +20,16 @@ For validation, Dexter consist of a gradle plugin which gives you an insight to 
 In your project level <b>build.gradle</b>:
 <pre>
 buildscript {
- repositories {
+
+repositories {
     google()
     jcenter()
     maven { url 'https://www.jitpack.io' }
- }
-
- dependencies {
-   classpath 'com.android.tools.build:gradle:3.1.3'
-   classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.6'
- }
+}
+dependencies {
+  classpath 'com.android.tools.build:gradle:3.1.3'
+  classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.6’
+}
 
 }
 </pre>
@@ -64,6 +64,24 @@ Run this task by <code>./gradlew validationTask</code> command. You will see the
 
 Now go to your project root directory and <b>app/build/outputs</b> you will see a directory created by name of <b>dexter</b>. Here you can find a text file by name of <b>DexClasses of classes.dex</b> which corresponds to your primary dex. If you open this you can see the list of classes in your primary dex where you can validate if any class has entered your primary dex or not.<br>
 
-![alt text](https://user-images.githubusercontent.com/12881364/42413901-c8063764-8247-11e8-87c8-738dd6c1f982.png)
+![alt text](https://user-images.githubusercontent.com/12881364/42414081-6598f770-824b-11e8-906e-727d94387c3c.png)
+
+You can also see the rest dex Files and there respective text files. You can open the remaining text files to have an insight in the classes entering in them.
+
+<h2>Configuring for a custom path</h2>
+<pre>
+task validationTask(type:DexterDefaultTask){
+  Dexter.configure().setApkPath("/Users/amanjeetsingh150/Desktop/app-debug.apk")
+}
+</pre>
+
+You can see the output in dexter folder as:
+![alt text](https://user-images.githubusercontent.com/12881364/42414254-0686e0cc-824f-11e8-8edc-193e6b475ae8.png)
+
+
+
+
+
+
 
 
