@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface PrimaryDex {
     boolean obfuscate() default false;
 
-    String[] extras() default {"0"};
+    String[] extras() default {""};
 }
