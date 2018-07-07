@@ -45,6 +45,7 @@ Now for applying plugin:
 <pre>apply plugin: 'com.bobble.dexter’</pre><br>
 Sync your project and run a <b>assembleDebug</b> task of gradle.
 Now write the following task in your <b>build.grade</b> for the debug apk produced to see the magic:<br>
+
 <pre>
 import com.bobble.dexter.DexterDefaultTask
 import com.bobble.dexter.core.Dexter
@@ -77,8 +78,10 @@ You can see the output in dexter folder as:<br>
 
 <img width="204" alt="screen shot 2018-07-08 at 1 30 15 am" src="https://user-images.githubusercontent.com/12881364/42414423-ebdf47ec-8252-11e8-93a6-148779a9aa0a.png">
 
+
 <h2>Manage your multidek.keep file</h2>
-Making and managing the keep file is also easy with <b>Dexter</b>. Compile the following in your app level <b>build.gradle</b>:
+Making and managing the keep file is also easy with <b>Dexter</b>. Compile the following in your app level <b>build.gradle</b>:<br>
+
 <pre>
 implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6’
 annotationProcessor 'com.github.bobblekeyboard.dexter:dexter-processors:1.0.6’
@@ -107,4 +110,11 @@ android/support/v7/app/AppCompatActivity
 android/os/Bundle
 com/example/amanjeetsingh150/test/InitClass
 </pre>
+
+Show some :heart: by starring the repo. Dexter is open for contributions. You are free to open issues and PRs.
+<h2>TODOs</h2>
+<ol>
+<li>Adding the Dexter Task in the gradle task graph</li>
+<li>More customizations for the arguments of Primary Dex annotation</li>
+</ol>
 
