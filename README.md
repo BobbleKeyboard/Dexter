@@ -13,7 +13,7 @@ orp/ardnahcimor/ultidex_sample/MyClass
 <h3>What Dexter do?</h3>
 Dexter helps in following to major things:<br>
 <ul>
-<li>Manage the multidex.keep file</li>
+<li>Manage the multidex.keep file by using annotations.</li>
 <li>To validate what goes in your Primary Dex. You can have look to list of whole classes which the dex contains.</li>
 </ul>
 
@@ -83,7 +83,7 @@ You can see the output in dexter folder as:<br>
 <img width="204" alt="screen shot 2018-07-08 at 1 30 15 am" src="https://user-images.githubusercontent.com/12881364/42414423-ebdf47ec-8252-11e8-93a6-148779a9aa0a.png">
 
 
-<h2>Manage your multidek.keep file</h2>
+<h2>Manage your multidex.keep file</h2>
 Making and managing the keep file is also easy with <b>Dexter</b>. Compile the following in your app level <b>build.gradle</b>:<br><br>
 
 
