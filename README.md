@@ -62,7 +62,7 @@ Run this task by <code>./gradlew validationTask</code> command. You will see the
 
 Now go to your project root directory and <b>app/build/outputs</b> you will see a directory created by name of <b>dexter</b>. Here you can find a text file by name of <b>DexClasses of classes.dex</b> which corresponds to your primary dex. If you open this you can see the list of classes in your primary dex where you can validate if any class has entered your primary dex or not.<br>
 
-![alt text](https://user-images.githubusercontent.com/12881364/42414081-6598f770-824b-11e8-906e-727d94387c3c.png)
+![alt text](https://user-images.githubusercontent.com/12881364/42414417-bee2a64e-8252-11e8-900c-c1dca9d11587.png)
 
 You can also see the rest dex Files and there respective text files. You can open the remaining text files to have an insight in the classes entering in them.
 
@@ -75,12 +75,35 @@ task validationTask(type:DexterDefaultTask){
 
 You can see the output in dexter folder as:<br>
 
-![alt text](https://user-images.githubusercontent.com/12881364/42414254-0686e0cc-824f-11e8-8edc-193e6b475ae8.png)
-
+<img src=“https://user-images.githubusercontent.com/12881364/42414423-ebdf47ec-8252-11e8-93a6-148779a9aa0a.png” width=“100px”>
 
 <h2>Manage your multidek.keep file</h2>
+Making and managing the keep file is also easy with <b>Dexter</b>. Compile the following in your app level <b>build.gradle</b>:
+<pre>
+implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6’
+annotationProcessor 'com.github.bobblekeyboard.dexter:dexter-processors:1.0.6’
+</pre>
 
+Annotate the classes you want to keep in your primary dex and Dexter would automatically make and manages the multidex.keep file by adding the class in the keep file. For example adding the <b>InitClass.java</b> to primary dex:
+<pre>
+import orp.ardnahcimor.ultidex.PrimaryDex;
 
+/**
+ * Class to be added in the primary dex
+ */
+@PrimaryDex
+public class InitClass {
 
+}
+</pre>
+You can also customize the annotations by mentioning extra dependencies you may want to keep in your primary dex as shown in following annotations:
+<pre>
+@PrimaryDex(extras = {"android/support/v7/app/AppCompatActivity", "android/os/Bundle"})
+</pre>
 
+Building the project would automatically create multidex.keep if it not exists and adds the extras:
+<pre>
+android/support/v7/app/AppCompatActivity
+android/os/Bundle
+</pre>
 
