@@ -9,7 +9,7 @@ import orp.ardnahcimor.ultidex.PrimaryDex;
  * @version 1.0
  * @since 7/3/18
  */
-@PrimaryDex(extras = {"The", "pro", "is", "here"})
+@PrimaryDex
 public class TestNoClass {
 
 }

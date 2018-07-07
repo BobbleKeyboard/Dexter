@@ -1,3 +1,6 @@
+import com.bobble.dexter.DexterDefaultTask
+import com.bobble.dexter.core.Dexter
+import com.bobble.dexter.core.Dexter.BuildVariant
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -5,16 +8,17 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://www.jitpack.io' }
         mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.3'
-        classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.1'
+        //classpath 'com.github.bobblekeyboard.dexter:dexter:1.0.1'
+        classpath 'com.bobble.dexter:dexter:1.0.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
 }
 
 allprojects {
@@ -26,10 +30,14 @@ allprojects {
 
 apply plugin: 'com.bobble.dexter'
 
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-//task checkitout(type: com.bobble.dexter.DexterDefaultTask) {
-//    println("running consumer task!")
-//}
+task multiDexTask(type: DexterDefaultTask) {
+    Dexter.configure().setBuildVariant(BuildVariant.DEBUG).setApkPath(null)
+}
+
+
+

@@ -55,7 +55,7 @@ public class DexterDefaultTask extends DefaultTask {
 
 
     @TaskAction
-    public void javaTask() {
+    public void dexterTask() {
         projectPath = getProject().getRootDir().getAbsolutePath();
 
         Dexter.BuildVariant variant = Dexter.configure().getVariant();
@@ -64,11 +64,11 @@ public class DexterDefaultTask extends DefaultTask {
         if (variant != null) {
             switch (variant) {
                 case DEBUG: {
-                    apkPath = apkOutputPath + "debug/";
+                    apkPath = apkOutputPath + "debug/app-debug.apk";
                     break;
                 }
                 case RELEASE: {
-                    apkPath = apkOutputPath + "release/";
+                    apkPath = apkOutputPath + "release/app-release-unsigned.apk";
                     break;
                 }
                 default: {
@@ -91,7 +91,7 @@ public class DexterDefaultTask extends DefaultTask {
         }
 
         try {
-            File file = new File(apkPath + "app-debug.apk");
+            File file = new File(apkPath);
             FileInputStream fileInputStream = new FileInputStream(file);
             zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
             extractZipEntriesFromZip(zipInputStream)
@@ -105,7 +105,6 @@ public class DexterDefaultTask extends DefaultTask {
 
                         @Override
                         public void onNext(File file) {
-                            System.out.println(" " + file.getName());
                             randomAccessFileOfDex = createRandomAccessFile(file);
                             try {
                                 if (randomAccessFileOfDex != null) {
@@ -204,6 +203,13 @@ public class DexterDefaultTask extends DefaultTask {
         readInt(randomAccessFileOfDex);
     }
 
+    /**
+     * <p>Reading bytes from a random file given as argument.</p>
+     *
+     * @param buffer read given bytes.
+     * @param randomAccessFile Random file to be used.
+     * @throws IOException In case if data is not read from file successfully.
+     */
     private void readBytes(byte[] buffer, RandomAccessFile randomAccessFile) throws IOException {
         randomAccessFile.readFully(buffer);
     }
@@ -223,10 +229,21 @@ public class DexterDefaultTask extends DefaultTask {
         }
     }
 
+    /**
+     * <p>Check for equality of magic number with given bytes.</p>
+     *
+     * @param magic bytes to be compared.
+     * @return true when match otherwise false.
+     */
     private static boolean verifyMagic(byte[] magic) {
         return Arrays.equals(magic, MAGIC_VALUE);
     }
 
+    /**
+     * Create Random access file from a given file.
+     * @param file File to be converted
+     * @return Random access file created in read mode only
+     */
     private RandomAccessFile createRandomAccessFile(File file) {
         try {
             return new RandomAccessFile(file, "r");
@@ -236,6 +253,13 @@ public class DexterDefaultTask extends DefaultTask {
         return null;
     }
 
+    /**
+     * Getting an observable stream of dex file from Zip file as input.
+     *
+     * @param zipInputStream zip inputstream of APK.
+     * @return Observable stream of array of DexFiles.
+     * @throws IOException
+     */
     private Observable<List<File>> extractZipEntriesFromZip(ZipInputStream zipInputStream) throws IOException {
         List<File> dexFileList = new ArrayList<>();
         ZipEntry zipEntry = zipInputStream.getNextEntry();
@@ -432,6 +456,12 @@ public class DexterDefaultTask extends DefaultTask {
         }
     }
 
+    /**
+     * Dump class description to files.
+     *
+     * @param descriptor descriptor of class files.
+     * @param dumpFile File in which text has to be dumped.
+     */
     private void dumpDescriptorToFile(String descriptor, File dumpFile) {
         if (printWriter == null) {
             try {
@@ -444,6 +474,12 @@ public class DexterDefaultTask extends DefaultTask {
         printWriter.flush();
     }
 
+    /**
+     * Formatter for class descriptor
+     *
+     * @param descriptor descriptor of the class from Dex file.
+     * @return formatted for class name.
+     */
     private String formatAndPrintDescriptor(String descriptor) {
         String formattedDescriptor = descriptor
                 //Strip of L
@@ -455,6 +491,13 @@ public class DexterDefaultTask extends DefaultTask {
     }
 
 
+    /**
+     * Reading string from a Random Access File.
+     *
+     * @param randomAccessFile file to be read.
+     * @return string read from file.
+     * @throws IOException
+     */
     private String readString(RandomAccessFile randomAccessFile) throws IOException {
         int utf16len = readUnsignedLeb128();
         byte inBuf[] = new byte[utf16len * 3];      // worst case
@@ -494,6 +537,13 @@ public class DexterDefaultTask extends DefaultTask {
         return result;
     }
 
+    /**
+     * Reading bytes from a file.
+     *
+     * @param randomAccessFile
+     * @return
+     * @throws IOException
+     */
     private byte readByte(RandomAccessFile randomAccessFile) throws IOException {
         randomAccessFile.readFully(tmpBuf, 0, 1);
         return tmpBuf[0];
