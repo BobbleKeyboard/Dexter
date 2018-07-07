@@ -7,6 +7,7 @@ import com.bobble.dexter.models.FieldIdItem;
 import com.bobble.dexter.models.MethodIdItem;
 import com.bobble.dexter.models.ProtoIdItem;
 import com.bobble.dexter.models.TypeIdItem;
+
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.internal.impldep.org.apache.http.util.TextUtils;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -68,7 +70,11 @@ public class DexterDefaultTask extends DefaultTask {
                     break;
                 }
                 case RELEASE: {
-                    apkPath = apkOutputPath + "release/app-release-unsigned.apk";
+                    if (Dexter.configure().isSigned()) {
+                        apkPath = apkOutputPath + "release/app-release.apk";
+                    } else {
+                        apkPath = apkOutputPath + "release/app-release-unsigned.apk";
+                    }
                     break;
                 }
                 default: {
@@ -206,7 +212,7 @@ public class DexterDefaultTask extends DefaultTask {
     /**
      * <p>Reading bytes from a random file given as argument.</p>
      *
-     * @param buffer read given bytes.
+     * @param buffer           read given bytes.
      * @param randomAccessFile Random file to be used.
      * @throws IOException In case if data is not read from file successfully.
      */
@@ -241,6 +247,7 @@ public class DexterDefaultTask extends DefaultTask {
 
     /**
      * Create Random access file from a given file.
+     *
      * @param file File to be converted
      * @return Random access file created in read mode only
      */
@@ -460,7 +467,7 @@ public class DexterDefaultTask extends DefaultTask {
      * Dump class description to files.
      *
      * @param descriptor descriptor of class files.
-     * @param dumpFile File in which text has to be dumped.
+     * @param dumpFile   File in which text has to be dumped.
      */
     private void dumpDescriptorToFile(String descriptor, File dumpFile) {
         if (printWriter == null) {

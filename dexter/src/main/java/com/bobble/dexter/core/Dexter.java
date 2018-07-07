@@ -9,6 +9,7 @@ public class Dexter {
     private static volatile Dexter mInstance;
     private String apkPath;
     private BuildVariant mVariant;
+    private boolean signed;
 
     public static Dexter configure() {
         if (mInstance == null) {
@@ -26,6 +27,16 @@ public class Dexter {
         return this;
     }
 
+    public synchronized Dexter setIsSigned(boolean signed){
+        this.signed = signed;
+        return this;
+    }
+
+
+    public synchronized boolean isSigned() {
+        return signed;
+    }
+
     public synchronized Dexter setBuildVariant (BuildVariant variant) {
         this.mVariant = variant;
         return this;
@@ -34,4 +45,6 @@ public class Dexter {
     public BuildVariant getVariant() {
         return mVariant;
     }
+
+
 }
