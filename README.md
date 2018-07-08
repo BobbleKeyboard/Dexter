@@ -47,7 +47,7 @@ allprojects {
 Now for applying plugin:
 <pre>apply plugin: 'com.bobble.dexter’</pre><br>
 Sync your project and run a <b>assembleDebug</b> task of gradle.
-Now write the following task in your <b>build.grade</b> for the debug apk produced to see the magic:<br><br>
+Now write the following task in your <b>build.gradle</b> for the debug apk produced to see the magic:<br><br>
 
 
 <pre>
