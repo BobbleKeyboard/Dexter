@@ -64,7 +64,7 @@ implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6’
 annotationProcessor 'com.github.bobblekeyboard.dexter:dexter-processors:1.0.6’
 </pre>
 
-<h2>Usage :</h2>
+<h2>Usage.</h2>
 
 <h3>Registering classes in Primary Dex</h3>
 
