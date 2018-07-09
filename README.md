@@ -91,7 +91,7 @@ android/os/Bundle
 orp/ardnahcimor/test/InitClass
 </pre>
 
-<h2>Validating the Dex Files</h2>
+<h3>Validating the Dex Files</h3>
 For validation, Dexter consists of a gradle plugin which gives you an insight to the list of classes going in your multiple dex files. Configuration is very simple:<br>
 
 Sync your project and run a <b>assembleDebug</b> task of gradle.
