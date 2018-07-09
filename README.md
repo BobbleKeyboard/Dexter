@@ -72,8 +72,6 @@ Annotate the classes you want to keep in your primary dex, with <b>@PrimaryDex</
 
 For example, Here we are adding the <b>InitClass.java</b> to primary dex:
 <pre>
-import orp.ardnahcimor.ultidex.PrimaryDex;
-
 @PrimaryDex
 public class InitClass {
 
