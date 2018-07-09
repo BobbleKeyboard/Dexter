@@ -6,14 +6,14 @@ A utility to manage MultiDex reached apps (>64k method counts).
 
 Managing multidex manually is a troublesome task in itself, this issue is commonly known as the "Worst nightmare of Android developers". Multiple Dalvik Executables can hinder your app's performance heavily in form of crashes and ANRs. It usually becomes a necessity to control what classes should end up in the primary dex file (classes.dex).
 
-<h3>What Dexter does?</h3>
+<h2>What Dexter does?</h2>
 Dexter helps in:<br>
 <ul>
 <li>Managing the class entries to be registered in Primary Dex file, using annotations.</li>
 <li>Validating what goes in your Primary Dex. You can have print the list of classes which the dex files contain using a simple task</li>
 </ul>
 
-<h3>Prerequisites.</h3>
+<h2>Prerequisites.</h2>
 
 Add the multidex support library into your project, as mentioned here : https://developer.android.com/studio/build/multidex
 
@@ -45,7 +45,6 @@ allprojects {
 </pre>
 
 Add the validationTask in your <b>build.gradle</b> for the debug apk produced to perform the magic:<br><br>
-
 <pre>apply plugin: 'com.bobble.dexter’</pre><br>
 
 <pre>
@@ -65,11 +64,11 @@ implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6’
 annotationProcessor 'com.github.bobblekeyboard.dexter:dexter-processors:1.0.6’
 </pre>
 
-<h3>Usage :</h3>
+<h2>Usage :</h2>
 
-<h2>Registering classes in Primary Dex</h2>
+<h3>Registering classes in Primary Dex</h3>
 
-Annotate the classes you want to keep in your primary dex and Dexter would automatically make the multidex.keep file by adding the annotated classes in the keep file. 
+Annotate the classes you want to keep in your primary dex, with <b>@PrimaryDex</b> annotation and Dexter will create the multidex.keep file(if not already present) and will also register the annotated classes. 
 
 For example, Here we are adding the <b>InitClass.java</b> to primary dex:
 <pre>
@@ -107,14 +106,14 @@ Now go to your project root directory and <b>app/build/outputs</b> you will see 
 
 You can also see the rest dex Files and there respective text files. You can open the remaining text files to have an insight in the classes entering in them.
 
-<h3>Configuring for a custom path</h3>
+<h3>Configure for a custom apk path</h3>
 <pre>
 task validationTask(type:DexterDefaultTask){
   Dexter.configure().setApkPath("/Users/amanjeetsingh150/Desktop/app-debug.apk")
 }
 </pre>
 
-<h3>Configuring for release build</h3>
+<h3>Configure for release build</h3>
 <pre>
 task validationTask(type:DexterDefaultTask){
     Dexter.configure().setBuildVariant(BuildVariant.RELEASE)
