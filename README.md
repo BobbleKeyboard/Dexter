@@ -45,7 +45,6 @@ allprojects {
 </pre>
 
 Add the validationTask in your <b>build.gradle</b> for the debug apk produced to perform the magic:
-
 <pre>apply plugin: 'com.bobble.dexter’</pre><br>
 
 <pre>
