@@ -45,7 +45,7 @@ allprojects {
 </pre>
 
 Add the validationTask in your <b>build.gradle</b> for the debug apk produced to perform the magic:
-<pre>apply plugin: 'com.bobble.dexter’</pre><br>
+<pre>apply plugin: 'com.bobble.dexter'</pre><br>
 
 <pre>
 import com.bobble.dexter.DexterDefaultTask
@@ -60,8 +60,8 @@ task validationTask(type:DexterDefaultTask){
 In you app's <b>build.gradle</b> add support for annotations:
 
 <pre>
-implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6’
-annotationProcessor 'com.github.bobblekeyboard.dexter:dexter-processors:1.0.6’
+implementation 'com.github.bobblekeyboard.dexter:dexter-annotations:1.0.6'
+annotationProcessor 'com.github.bobblekeyboard.dexter:dexter-processors:1.0.6'
 </pre>
 
 <h2>Usage.</h2>
